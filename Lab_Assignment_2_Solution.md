@@ -59,34 +59,38 @@ P = (C − k) mod 26
 
 ## Implementation
 
-File: `caesar_cipher.py`
+File: `caesar_cipher.cpp`
 
 ### Core functions
 
-```python
-def caesar_encrypt(plaintext: str, key: int) -> str:
-    key = key % 26
-    result = []
-    for ch in plaintext:
-        if ch.isupper():
-            shifted = (ord(ch) - ord("A") + key) % 26
-            result.append(chr(shifted + ord("A")))
-        elif ch.islower():
-            shifted = (ord(ch) - ord("a") + key) % 26
-            result.append(chr(shifted + ord("a")))
-        else:
-            result.append(ch)
-    return "".join(result)
+```cpp
+string caesarEncrypt(const string &plaintext, int key) {
+    key = ((key % 26) + 26) % 26;
+    string result;
+    for (char ch : plaintext) {
+        if (isupper(ch)) {
+            int shifted = (ch - 'A' + key) % 26;
+            result += char(shifted + 'A');
+        } else if (islower(ch)) {
+            int shifted = (ch - 'a' + key) % 26;
+            result += char(shifted + 'a');
+        } else {
+            result += ch;
+        }
+    }
+    return result;
+}
 
-
-def caesar_decrypt(ciphertext: str, key: int) -> str:
-    return caesar_encrypt(ciphertext, -key)
+string caesarDecrypt(const string &ciphertext, int key) {
+    return caesarEncrypt(ciphertext, -key);
+}
 ```
 
-### How to run
+### How to compile and run
 
 ```bash
-python3 caesar_cipher.py
+g++ -std=c++17 -o caesar_cipher caesar_cipher.cpp
+./caesar_cipher
 ```
 
 Menu options:
