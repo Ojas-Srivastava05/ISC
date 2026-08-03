@@ -13,7 +13,7 @@
 using namespace std;
 
 string caesarEncrypt(const string &plaintext, int key) {
-    key = ((key % 26) + 26) % 26;  // normalize to [0, 25]
+    key = ((key % 26) + 26) % 26;  
     string result;
     result.reserve(plaintext.size());
 
@@ -62,7 +62,7 @@ int main() {
         if (!getline(cin, choice)) break;
 
         if (choice == "5") {
-            cout << "Exiting. Goodbye!\n";
+            cout << "Exited \n";
             break;
         }
 
