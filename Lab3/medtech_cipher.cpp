@@ -7,8 +7,8 @@
 using namespace std;
 
 // Plain : ABCDEFGHIJKLMNOPQRSTUVWXYZ
-// Cipher: QWERTYUIOPASDFGHJKLZXCVBNM
-string key = "QWERTYUIOPASDFGHJKLZXCVBNM";
+// Cipher: QAZWSXEDCRFVTGBYHNUJMIKOLP
+string key = "QAZWSXEDCRFVTGBYHNUJMIKOLP";
 
 // ---------- Task 1: Brute-force Caesar ----------
 void brute_force_caesar(string ciphertext) {
