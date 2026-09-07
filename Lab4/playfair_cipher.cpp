@@ -1,20 +1,15 @@
-// Lab Assignment 4 - Playfair Cipher
-// Key: DRONE | Plaintext: ATTACK AT THE STATION
-
 #include <iostream>
 #include <string>
 using namespace std;
 
 char matrix[5][5];
 
-// 1. Build 5x5 key matrix (I/J share one cell — we skip J)
 void buildMatrix(string key) {
     int used[26] = {0};
-    used['J' - 'A'] = 1; // treat J as I
+    used['J' - 'A'] = 1;
 
     int row = 0, col = 0;
 
-    // place key letters first
     for (int i = 0; i < key.length(); i++) {
         char ch = key[i];
         if (ch >= 'a' && ch <= 'z') ch = ch - 32;
@@ -28,7 +23,6 @@ void buildMatrix(string key) {
         if (col == 5) { col = 0; row++; }
     }
 
-    // fill remaining letters
     for (char ch = 'A'; ch <= 'Z'; ch++) {
         if (used[ch - 'A']) continue;
         matrix[row][col] = ch;
@@ -57,7 +51,6 @@ void findPos(char ch, int &r, int &c) {
             }
 }
 
-// 2. Format plaintext into digraphs
 string prepareText(string text) {
     string clean = "";
     for (int i = 0; i < text.length(); i++) {
@@ -67,7 +60,6 @@ string prepareText(string text) {
         if (ch >= 'A' && ch <= 'Z') clean += ch;
     }
 
-    // insert X between repeated letters (e.g. TT -> TX T)
     string fixed = "";
     for (int i = 0; i < clean.length(); i++) {
         fixed += clean[i];
@@ -75,14 +67,12 @@ string prepareText(string text) {
             fixed += 'X';
     }
 
-    // pad X if odd length
     if (fixed.length() % 2 == 1)
         fixed += 'X';
 
     return fixed;
 }
 
-// 3. Encrypt one digraph (dir = +1 encrypt, -1 decrypt)
 string processPair(char a, char b, int dir) {
     int r1, c1, r2, c2;
     findPos(a, r1, c1);
@@ -90,15 +80,12 @@ string processPair(char a, char b, int dir) {
 
     string out = "";
     if (r1 == r2) {
-        // same row — shift columns
         out += matrix[r1][(c1 + dir + 5) % 5];
         out += matrix[r2][(c2 + dir + 5) % 5];
     } else if (c1 == c2) {
-        // same column — shift rows
         out += matrix[(r1 + dir + 5) % 5][c1];
         out += matrix[(r2 + dir + 5) % 5][c2];
     } else {
-        // rectangle — swap columns
         out += matrix[r1][c2];
         out += matrix[r2][c1];
     }
@@ -112,7 +99,6 @@ string encrypt(string digraphs) {
     return cipher;
 }
 
-// 4. Decrypt
 string decrypt(string cipher) {
     string plain = "";
     for (int i = 0; i < cipher.length(); i += 2)
@@ -128,23 +114,19 @@ int main() {
     cout << "Key       : " << key << endl;
     cout << "Plaintext : " << plaintext << endl;
 
-    // Task 1
     buildMatrix(key);
     cout << endl;
     printMatrix();
 
-    // Task 2
     string digraphs = prepareText(plaintext);
     cout << "\nDigraphs  : ";
     for (int i = 0; i < digraphs.length(); i += 2)
         cout << digraphs[i] << digraphs[i + 1] << " ";
     cout << endl;
 
-    // Task 3
     string ciphertext = encrypt(digraphs);
     cout << "Ciphertext: " << ciphertext << endl;
 
-    // Task 4
     string recovered = decrypt(ciphertext);
     cout << "Decrypted : " << recovered << endl;
 
